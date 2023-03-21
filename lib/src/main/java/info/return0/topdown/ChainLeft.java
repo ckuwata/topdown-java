@@ -29,8 +29,12 @@ public class ChainLeft<T> implements Parser<T> {
 				return Result.success(v);
 			}
 			var n = this.delegate.parse(source);
-			if (n.failed() && this.allowTrailingOperator) {
-				return Result.success(v);
+			if (n.failed()) {
+				if (this.allowTrailingOperator) {
+					return Result.success(v);
+				} else {
+					return n;
+				}
 			}
 			return chain(Result.success(o.getValue().apply(v, n.getValue())), source);
 		});
