@@ -9,3 +9,4 @@
 
 rootProject.name = "topdown-java"
 include("lib")
+include("example")

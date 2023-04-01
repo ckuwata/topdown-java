@@ -1,12 +1,24 @@
-package info.return0.topdown;
+package info.return0.topdown.example.calc;
 
 import java.util.function.BiFunction;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
+import info.return0.topdown.ChainLeft;
+import info.return0.topdown.CharacterSequence;
+import info.return0.topdown.Choice;
+import info.return0.topdown.Parser;
+import info.return0.topdown.ParsingError;
+import info.return0.topdown.Regex;
+import info.return0.topdown.Result;
+import info.return0.topdown.Str;
+import info.return0.topdown.Token;
 
-public class CalculatorTest {
-	interface Expr {
+public class Calculator {
+	public Result<Expr> parse(String expr) {
+		var seq = CharacterSequence.builder().source(expr).autoRemoveWS(true).build();
+		return new CalculatorParser().parse(seq);
+	}
+	
+	public static interface Expr {
 		long calc();
 	}
 	
@@ -135,51 +147,5 @@ public class CalculatorTest {
 			}
 		}
 
-	}
-
-	@Test
-	public void test01() {
-		String expr = "1 + 2";
-		var ret = new CalculatorParser().parse(CharacterSequence.builder().source(expr).autoRemoveWS(true).build());
-		Assertions.assertFalse(ret.failed());
-		Assertions.assertEquals(3, ret.getValue().calc());
-	}
-	
-	@Test
-	public void test02() {
-		String expr = "1 + 2 a";
-		var ret = new CalculatorParser().parse(CharacterSequence.builder().source(expr).autoRemoveWS(true).build());
-		Assertions.assertTrue(ret.failed());
-	}
-	
-	@Test
-	public void test03() {
-		String expr = "1 + 2 * 3";
-		var ret = new CalculatorParser().parse(CharacterSequence.builder().source(expr).autoRemoveWS(true).build());
-		Assertions.assertFalse(ret.failed());
-		Assertions.assertEquals(7, ret.getValue().calc());
-	}
-	
-	@Test
-	public void test04() {
-		String expr = "(1 + 2) * 3";
-		var ret = new CalculatorParser().parse(CharacterSequence.builder().source(expr).autoRemoveWS(true).build());
-		Assertions.assertFalse(ret.failed(), () -> ret.getReason().toString());
-		Assertions.assertEquals(9, ret.getValue().calc());
-	}
-	
-	@Test
-	public void test05() {
-		String expr = "(1 + 2 * 3";
-		var ret = new CalculatorParser().parse(CharacterSequence.builder().source(expr).autoRemoveWS(true).build());
-		Assertions.assertTrue(ret.failed());
-	}
-	
-	@Test
-	public void test06() {
-		String expr = "(1 + 2) * (10 - 2)";
-		var ret = new CalculatorParser().parse(CharacterSequence.builder().source(expr).autoRemoveWS(true).build());
-		Assertions.assertFalse(ret.failed());
-		Assertions.assertEquals(24, ret.getValue().calc());
 	}
 }
