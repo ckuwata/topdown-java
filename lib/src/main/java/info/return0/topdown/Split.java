@@ -5,14 +5,14 @@ import java.util.Collection;
 
 public class Split<T> implements Parser<Collection<T>> {
 	private Parser<T> delegate;
-	private Parser<T> delimeter;
+	private Parser<?> delimeter;
 	private boolean allowTrailingDelimeter;
 
-	public Split(Parser<T> delegate, Parser<T> delimeter) {
+	public Split(Parser<T> delegate, Parser<?> delimeter) {
 		this(delegate, delimeter, false);
 	}
 	
-	public Split(Parser<T> delegate, Parser<T> delimeter, boolean allowTrailingDelimeter) {
+	public Split(Parser<T> delegate, Parser<?> delimeter, boolean allowTrailingDelimeter) {
 		this.delegate = delegate;
 		this.delimeter = delimeter;
 		this.allowTrailingDelimeter = allowTrailingDelimeter;

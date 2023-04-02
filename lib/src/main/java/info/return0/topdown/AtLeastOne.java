@@ -19,7 +19,7 @@ public class AtLeastOne<T> implements Parser<Collection<T>> {
 			result = this.delegate.parse(source);
 		}
 		if (ret.size() == 0) {
-			return Result.end(new ParsingError(this.delegate.toString()));
+			return Result.end(result.getReason());
 		}
 		return Result.success(ret);
 	}

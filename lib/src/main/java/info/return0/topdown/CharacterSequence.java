@@ -135,4 +135,12 @@ public class CharacterSequence {
 		}
 	}
 
+	public void suspendHook() {
+		this.ignoreHook = true;
+	}
+	
+	public void resumeHook() {
+		this.ignoreHook = false;
+	}
+
 }
