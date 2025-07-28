@@ -21,19 +21,26 @@ public class Split<T> implements Parser<Collection<T>> {
 	@Override
 	public Result<Collection<T>> parse(CharacterSequence source) {
 		var ret = new ArrayList<T>();
-		var result = this.delegate.parse(source);
 		while (true) {
+			var result = this.delegate.parse(source);
+			if (result.failed()) {
+				if (ret.isEmpty()) {
+					if (source.rest().length() == 0) {
+						return Result.success(ret);
+					}
+					return Result.end(result.getReason());
+				} else {
+					if (this.allowTrailingDelimeter) {
+						break;
+					} else {
+						return Result.end(result.getReason());
+					}
+				}
+			}
 			ret.add(result.getValue());
+
 			if (this.delimeter.parse(source).failed()) {
 				break;
-			}
-			result = this.delegate.parse(source);
-			if (result.failed()) {
-				if (this.allowTrailingDelimeter) {
-					break;
-				} else {
-					return Result.end(result.getReason());
-				}
 			}
 		}
 		return Result.success(ret);

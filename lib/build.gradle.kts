@@ -11,10 +11,7 @@ plugins {
     `java-library`
 }
 
-repositories {
-    // Use Maven Central for resolving dependencies.
-    mavenCentral()
-}
+
 
 dependencies {
     // Use JUnit Jupiter for testing.
